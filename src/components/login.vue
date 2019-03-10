@@ -47,7 +47,17 @@ export default {
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            alert('submit!');
+            this.$http.post('login',this.formData).then(res=>{
+                // console.log(res);
+                if(res.data.meta.status==='400'){
+                    this.$message.error(res.data.meta.msg);
+                }else{
+                    this.$message.success(res.data.meta.msg);
+                window.sessionStorage.setItem('token',res.data.data.token)
+                this.$router.push('/')
+                };
+            
+            })
           } else {
             this.$message.error('请输入正确的用户名或密码');
             return false;
